@@ -1,9 +1,13 @@
 package com.telimay.spring.boot.backend.apirest.controllers;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,40 +38,147 @@ public class ClienteRestController {
 	}
 	
 	@GetMapping("/clientes/{id}")
-	public Cliente show(@PathVariable Long id ) {
+	public ResponseEntity<?> show(@PathVariable Long id){
 		
-		return clienteService.findById(id);
+		Map<String, Object> response = new HashMap<>();
+		
+		try {
+			
+			Cliente clienteResult = clienteService.findById(id);
+					
+			
+			if (clienteResult==null) {
+				
+				response.put("mensaje", "Id cliente no encontrado");
+				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+				
+			}
+			
+			return new ResponseEntity<Cliente>(clienteResult, HttpStatus.OK);
+			
+			
+		}catch(DataAccessException e) {
+			
+			response.put("mensaje", "No se pudo obtener el cliente");
+			response.put("error", e.getMessage().concat(": ")
+					              .concat(e.getMostSpecificCause().getMessage()));
+			
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+			
+		}
+		
 	}
+//	public Cliente show(@PathVariable Long id ) {
+//		
+//		return clienteService.findById(id);
+//	}
 	
 	@PostMapping("/clientes")
-	@ResponseStatus(HttpStatus.CREATED)
-	public Cliente create(@RequestBody Cliente cliente) {
+	public ResponseEntity<?>create(@RequestBody Cliente cliente){
 		
-		return clienteService.save(cliente);
+		Map<String, Object> response = new HashMap<>();
+		
+		try {
+			
+			Cliente clienteResult = clienteService.save(cliente);
+			
+			return new ResponseEntity<Cliente>(clienteResult, HttpStatus.CREATED);
+			
+		}catch(DataAccessException e) {
+			
+			response.put("mensaje", "No se pudo crear el cliente");
+			response.put("error", e.getMessage().concat(": ")
+					.concat(e.getMostSpecificCause().getMessage()));
+			
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+			
+		}
 		
 	}
+//	@ResponseStatus(HttpStatus.CREATED)
+//	public Cliente create(@RequestBody Cliente cliente) {
+//		
+//		return clienteService.save(cliente);
+//		
+//	}
 	
 	@PutMapping("/clientes/{id}")
-	@ResponseStatus(HttpStatus.CREATED)
-	public Cliente update(@RequestBody Cliente cliente, @PathVariable Long id) {
+	public ResponseEntity<?> update(@RequestBody Cliente cliente, @PathVariable Long id){
 		
-		Cliente clienteActual = clienteService.findById(id);
+		Map<String, Object> response = new HashMap<>();
 		
-		clienteActual.setApellido(cliente.getApellido());
-		clienteActual.setEmail(cliente.getEmail());
-		clienteActual.setNombre(cliente.getNombre());
+		Cliente clienteActual	= null;
+		Cliente clienteUpdate	= null;
 		
-		return clienteService.save(clienteActual);
+		try {
+			
+			clienteActual = clienteService.findById(id);
+			
+			clienteActual.setApellido(cliente.getApellido());
+			clienteActual.setEmail(cliente.getEmail());
+			clienteActual.setNombre(cliente.getNombre());
+			
+			clienteUpdate = clienteService.save(clienteActual);
+						
+		}catch(DataAccessException e) {
+			
+			response.put("mensaje", "No se pudo actualizar cliente");
+			response.put("error", e.getMessage().concat(": ")
+								.concat(e.getMostSpecificCause().getMessage()));
+			
+			return new ResponseEntity<Map<String, Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
+			
+		}
+		
+
+		response.put("mensaje", "Cliente actualizado !!!");
+		response.put("objeto", clienteUpdate);
+		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 		
 		
 	}
+//	@ResponseStatus(HttpStatus.CREATED)
+//	public Cliente update(@RequestBody Cliente cliente, @PathVariable Long id) {
+//		
+//		Cliente clienteActual = clienteService.findById(id);
+//		
+//		clienteActual.setApellido(cliente.getApellido());
+//		clienteActual.setEmail(cliente.getEmail());
+//		clienteActual.setNombre(cliente.getNombre());
+//		
+//		return clienteService.save(clienteActual);
+//		
+//		
+//	}
 	
 	@DeleteMapping("/clientes/{id}")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void delete(@PathVariable Long id) {
+	public ResponseEntity<?> delete(@PathVariable Long id){
 		
-		clienteService.delete(id);
+		Map<String, Object> response = new HashMap<>();
+		
+		try {
+			
+			clienteService.delete(id);
+			
+		}catch(DataAccessException e) {
+			
+			response.put("mensaje", "No se pudo eliminar el cliente");
+			response.put("error",e.getMessage().concat(": ")
+					.concat(e.getMostSpecificCause().getMessage()));
+			
+			return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
+			
+		}
+		
+		response.put("mensaje", "Cliente eliminado !!!");
+		return new ResponseEntity<Map<String, Object>>(response,HttpStatus.OK);
+		
 	}
+//	@ResponseStatus(HttpStatus.NO_CONTENT)
+//	public void delete(@PathVariable Long id) {
+//		
+//		clienteService.delete(id);
+//	}
 	
 
 }
