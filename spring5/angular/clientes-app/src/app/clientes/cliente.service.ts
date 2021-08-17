@@ -30,21 +30,29 @@ export class ClienteService {
 
   }
 
-  getClientes(): Observable <Cliente[]> {
+  // Lo cambiamos porque ahora no receibimos un formato
+  // Cliente. Recibimos un formato generico
+  //getClientes(): Observable <Cliente[]> {
+  getClientes(page:number): Observable <any>{
 
     //return this.httpClient.get<Cliente>(urlEndPoint);
-    return this.httpClient.get(this.urlEndPoint).pipe(
-      tap( response => {
-        let clientes = response as Cliente[];
+    // return this.httpClient.get(this.urlEndPoint).pipe( clase 82
+    return this.httpClient.get(this.urlEndPoint + '/page/' +  page).pipe(
+      tap( (response:any) => {
+        //let clientes = response as Cliente[];
 
-        clientes.forEach( cliente => {
+        //clientes.forEach( cliente => {
+        (response.content as Cliente[]).forEach( cliente => {
           console.log (cliente.nombre);
         })
-        
+
       }),
-      map(response => {
-        let clientes = response as Cliente[];
-        return clientes.map(cliente => {
+      map((response:any) => {
+
+        //let clientes = response as Cliente[]; Clase 82
+
+        //return clientes.map(cliente => { Clase 82
+        (response.content as Cliente[]).map(cliente => {
 
           //registerLocaleData(localeES,'es');
 
@@ -54,9 +62,10 @@ export class ClienteService {
           //cliente.createAt = datePipe.transform(cliente.createAt,"dd/MM/yyyy");
           //cliente.createAt = datePipe.transform(cliente.createAt,'EEEE dd, MMMM yyyy');
           return cliente;
+
         });
-      }
-      )
+        return response;
+      })
     );
 
   }

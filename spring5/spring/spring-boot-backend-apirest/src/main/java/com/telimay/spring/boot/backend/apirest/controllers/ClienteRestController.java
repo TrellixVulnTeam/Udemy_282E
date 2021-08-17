@@ -43,6 +43,7 @@ public class ClienteRestController {
 		
 	}
 	
+	// Implementacion de paginacion
 	@GetMapping("/clientes/page/{page}")
 	public Page<Cliente> index(@PathVariable Integer page){
 		
