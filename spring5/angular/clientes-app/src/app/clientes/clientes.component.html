@@ -37,7 +37,8 @@
       </tbody>
 
     </table>
-    <paginator-nav></paginator-nav>
+    <!-- El *ngIf verificar si el paginador existe -->
+    <paginator-nav *ngIf="paginador" [paginador] = "paginador"></paginator-nav>
 
 
   </div>
