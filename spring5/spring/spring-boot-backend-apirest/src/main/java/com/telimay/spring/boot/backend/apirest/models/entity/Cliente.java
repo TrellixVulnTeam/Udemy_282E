@@ -14,6 +14,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 
@@ -41,16 +42,17 @@ public class Cliente implements Serializable {
 	@Email(message="debe tener formato de email")
 	private String email;
 	
+	@NotNull(message="no puede ser vacío")
 	@Column(name="create_at")
 	@Temporal(TemporalType.DATE)
 	private Date createAt;
 	
-	@PrePersist
-	public void prePersist() {
-		
-		createAt = new Date();
-		
-	}
+//	@PrePersist
+//	public void prePersist() {
+//		
+//		createAt = new Date();
+//		
+//	}
 
 	public Long getId() {
 		return id;
