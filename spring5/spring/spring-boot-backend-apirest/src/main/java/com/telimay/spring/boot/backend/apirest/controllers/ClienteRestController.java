@@ -1,6 +1,8 @@
 package com.telimay.spring.boot.backend.apirest.controllers;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -13,10 +15,13 @@ import java.util.stream.Collectors;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -215,6 +220,27 @@ public class ClienteRestController {
 		
 		try {
 			
+			// este codigo proviene del upload de foto y lo colocamos
+			// para eliminar la foto y no dejar la foto huerfana
+			
+			Cliente cliente = clienteService.findById(id);
+			
+			String nombreFotoAnterior = cliente.getFoto();
+			
+			if (nombreFotoAnterior!=null && nombreFotoAnterior.length()>0) {
+				
+				Path rutaFotoAnterior = Paths.get("uploads").resolve(nombreFotoAnterior).toAbsolutePath();
+				
+				File archivoFotoAnterior = rutaFotoAnterior.toFile();
+				
+				if (archivoFotoAnterior.exists() && archivoFotoAnterior.canRead()) {
+					
+					archivoFotoAnterior.delete();
+				}
+				
+			}
+			
+			
 			clienteService.delete(id);
 			
 		}catch(DataAccessException e) {
@@ -261,10 +287,28 @@ public class ClienteRestController {
 			} catch (IOException e) {
 
 				response.put("mensaje", "Error al subir la imagen : " + nombreArchivo);
-				response.put("error",e.getMessage().concat(": ")
-						.concat(e.getCause().getMessage()));
+				//response.put("error",e.getMessage().concat(": ")
+				//		.concat(e.getCause().getMessage()));
 				
 				return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
+				
+			}
+			
+			// En la siguiente parte de código eliminamos la foto existente asociado
+			// al cliente.
+			
+			String nombreFotoAnterior = cliente.getFoto();
+			
+			if (nombreFotoAnterior!=null && nombreFotoAnterior.length()>0) {
+				
+				Path rutaFotoAnterior = Paths.get("uploads").resolve(nombreFotoAnterior).toAbsolutePath();
+				
+				File archivoFotoAnterior = rutaFotoAnterior.toFile();
+				
+				if (archivoFotoAnterior.exists() && archivoFotoAnterior.canRead()) {
+					
+					archivoFotoAnterior.delete();
+				}
 				
 			}
 			
@@ -282,6 +326,39 @@ public class ClienteRestController {
 		response.put("mensaje", "Error al subir imagen " );
 		
 		return new ResponseEntity<Map<String,Object>>(response,HttpStatus.BAD_REQUEST);
+		
+	}
+	
+	@GetMapping("/uploads/img/{nombreFoto:.+}") // :.+ indica que viene con punto y una extension
+	public ResponseEntity<Resource> verFoto(@PathVariable String nombreFoto){
+		
+		Path rutaFoto = Paths.get("uploads").resolve(nombreFoto).toAbsolutePath();
+		Resource recurso = null;
+		
+		try {
+			
+			recurso = new UrlResource(rutaFoto.toUri());
+			
+		} catch (MalformedURLException e) {
+			
+			e.printStackTrace();
+		}
+		
+		if (!recurso.exists() && !recurso.isReadable()) {
+			
+			throw new RuntimeException("Error, no se pudo cargar la imagen " + nombreFoto);
+			
+		}
+		
+		// agregamos una cabecera para que el recurso lo forcemos
+		// para que pueda descargarse
+		HttpHeaders cabecera = new HttpHeaders();
+		
+		//cabecera.add("Content-Disposition", nombreFoto)
+		cabecera.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + recurso.getFilename() + "\"");
+		
+		
+		return new ResponseEntity<Resource>(recurso, cabecera, HttpStatus.OK);
 		
 	}
 	
