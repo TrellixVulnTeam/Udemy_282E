@@ -3,7 +3,7 @@ import { formatDate, DatePipe } from '@angular/common';
 import localeES from '@angular/common/locales/es';
 import { Cliente } from './cliente';
 import { Observable, throwError} from 'rxjs';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpRequest, HttpEvent } from '@angular/common/http';
 import { map, catchError, tap } from 'rxjs/operators';
 import swal from 'sweetalert2';
 import { Router } from '@angular/router';
@@ -132,6 +132,39 @@ export class ClienteService {
   deleteCliente(id:number):Observable<Cliente>{
 
     return this.httpClient.delete<Cliente>(`${this.urlEndPoint}/${id}`,{headers : this.httpHeaders});
+
+  }
+
+  //subirFoto(archivo: File, id):Observable<Cliente>{
+  subirFoto(archivo: File, id):Observable<HttpEvent<{}>>{
+
+    let formData = new FormData(); // Clase JavaScript Nativa buscar en fromdata google.
+
+    // archivo -> mismo nombre que le pusimos en el backend : @RequestParam("archivo")
+    formData.append("archivo", archivo);
+    formData.append("id", id);
+
+    console.log(archivo.name);
+    console.log("id :" + id);
+
+    const req = new HttpRequest('POST',`${this.urlEndPoint}/upload`, formData,
+    {
+      reportProgress : true
+    }
+    );
+
+    // El post igual que en BackEdn PortMapping("/clientes/upload")
+    return this.httpClient.request(req);
+    //.pipe(
+
+    //  map((response : any) => response.cliente as Cliente),
+    //  catchError(e => {
+
+    //    console.error(e.error.mensaje);
+    //    swal.fire('Error al editar', e.error.mensaje,'error');
+    //    return throwError(e);
+    //  })
+    //);
 
   }
 

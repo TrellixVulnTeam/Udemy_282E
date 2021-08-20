@@ -21,7 +21,7 @@
       </thead>
       <tbody>
         <tr *ngFor="let cliente of clientes" >
-          <td>{{ cliente.id }}</td>
+          <td><button type = "button" class="btn btn-success btn-sm" [routerLink]="['/clientes/upload', cliente.id]"></button> {{ cliente.id }}</td>
           <td>{{ cliente.nombre }}</td>
           <td>{{ cliente.apellido | uppercase}}</td>
           <td>{{ cliente.createAt | date:"EEEE dd, MMMM yyyy"}}</td>

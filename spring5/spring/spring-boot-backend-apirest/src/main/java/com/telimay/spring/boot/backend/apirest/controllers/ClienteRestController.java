@@ -14,6 +14,8 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -47,6 +49,9 @@ public class ClienteRestController {
 	
 	@Autowired
 	IClienteService clienteService;
+	
+	private final Logger log = LoggerFactory.getLogger(ClienteRestController.class);
+	
 	
 	@GetMapping("/clientes")
 	public List<Cliente> index(){
@@ -280,6 +285,9 @@ public class ClienteRestController {
 			
 			Path rutaArchivo = Paths.get("uploads").resolve(nombreArchivo).toAbsolutePath();
 			
+			log.info(nombreArchivo.toString());
+			
+			
 			try {
 				
 				Files.copy(archivo.getInputStream(), rutaArchivo);
@@ -334,6 +342,8 @@ public class ClienteRestController {
 		
 		Path rutaFoto = Paths.get("uploads").resolve(nombreFoto).toAbsolutePath();
 		Resource recurso = null;
+		
+		log.info(nombreFoto.toString());
 		
 		try {
 			
