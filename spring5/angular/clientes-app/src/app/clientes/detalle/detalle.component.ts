@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Cliente } from '../cliente';
 import { ClienteService } from '../cliente.service';
 import { ModalService } from './modal.service';
-import { ActivatedRoute } from '@angular/router';
+//import { ActivatedRoute } from '@angular/router';
 import { HttpEventType } from '@angular/common/http';
 import swal from 'sweetalert2';
 
@@ -21,7 +21,7 @@ export class DetalleComponent implements OnInit {
   // constructor(private clienteService : ClienteService,
   //             private activatedRoute : ActivatedRoute) { }
   constructor(private clienteService : ClienteService,
-              private modalService   : ModalService) { }
+              public  modalService   : ModalService) { }
 
 
   ngOnInit(): void {
@@ -80,6 +80,8 @@ export class DetalleComponent implements OnInit {
 
               this.cliente = response.cliente as Cliente;
 
+              this.modalService.notificarUpload.emit(this.cliente);
+
               //swal.fire('La foto se ha subido completamente !!',`La carga ha sido exitosa : ${this.cliente.foto}`, 'success');
               swal.fire('La foto se ha subido completamente !!',response.mensaje, 'success');
 
@@ -103,6 +105,7 @@ export class DetalleComponent implements OnInit {
     this.modalService.cerrarModal();
     this.fotoSeleccionada = null;
     this.progreso = 0;
+
   }
 
 }

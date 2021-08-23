@@ -1,5 +1,7 @@
-<div class="modal" tabindex="-1">
-  <div class="modal-dialog">
+<div class="abrir-modal animacion fadeIn" *ngIf="modalService.modal">
+<div  class="modal" tabindex="-1" style="display:block">
+  <!-- Agregar modal-lg para que sea mas largo-->
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">{{titulo}}</h5>
@@ -40,7 +42,8 @@
             <div class="col-sm">
               <!-- src corresponde a la ruta descrita en el BackEnd que carga la Foto
                    en el Api RestController @GetMapping("/uploads/img/{nombreFoto:-+}") -->
-              <img *ngIf="cliente?.foto" src="http://localhost:8080/api/uploads/img/{{cliente.foto}}" alt="{{cliente.foto}}" class="img-thumbnail rounded">
+              <img *ngIf="cliente?.foto" src="http://localhost:8080/api/uploads/img/{{cliente.foto}}"
+                    alt="{{cliente.foto}}" class="img-thumbnail rounded">
 
             </div>
 
@@ -54,4 +57,5 @@
       </div>
     </div>
   </div>
+</div>
 </div>

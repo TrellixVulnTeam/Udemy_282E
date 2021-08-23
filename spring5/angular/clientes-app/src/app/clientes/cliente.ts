@@ -1,3 +1,5 @@
+import { Region } from
+
 export class Cliente {
 
   id : number =0;
@@ -6,5 +8,6 @@ export class Cliente {
   createAt : string = '';
   email : string = '';
   foto : string="";
+  region : Region;
 
 }

@@ -26,7 +26,19 @@
           <!--
           <td><button type = "button" class="btn btn-success btn-sm" [routerLink]="['/clientes/upload', cliente.id]"></button> {{ cliente.id }}</td>
           -->
-          <td><button type = "button" (click)="abrirModal(cliente)" class="btn btn-success btn-sm" ></button> {{ cliente.id }}</td>
+          <td>
+            <img (click)="abrirModal(cliente)"
+                 *ngIf="cliente?.foto" src="http://localhost:8080/api/uploads/img/{{cliente.foto}}"
+                  alt="{{cliente.foto}}" class="img-thumbnail rounded"
+                  style="width:64px; cursor:pointer;">
+            <img (click)="abrirModal(cliente)"
+                 *ngIf="!cliente?.foto" src="http://localhost:8080/images/sin_foto.jpg"
+                 alt="sin-foto" class="img-thumbnail rounded"
+                style="width:64px; cursor:pointer;">
+            <!--
+            <button type = "button" (click)="abrirModal(cliente)" class="btn btn-success btn-sm" ></button> {{ cliente.id }}
+            -->
+          </td>
           <td>{{ cliente.nombre }}</td>
           <td>{{ cliente.apellido | uppercase}}</td>
           <td>{{ cliente.createAt | date:"EEEE dd, MMMM yyyy"}}</td>

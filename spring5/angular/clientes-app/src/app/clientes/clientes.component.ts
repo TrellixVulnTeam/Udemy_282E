@@ -19,7 +19,7 @@ export class ClientesComponent implements OnInit  {
 
   constructor(private clienteService: ClienteService,
               private activatedRoute: ActivatedRoute,
-              private modaleService : ModalService) {}
+              public  modalService : ModalService) {}
 
   ngOnInit(){
 
@@ -33,6 +33,16 @@ export class ClientesComponent implements OnInit  {
         { this.clientes  = response.content as Cliente[];
           this.paginador = response }  );
 
+      });
+
+      this.modalService.notificarUpload.subscribe(cliente => {
+        this.clientes = this.clientes.map(clienteOriginal => {
+          if (cliente.id == clienteOriginal.id){
+            clienteOriginal.foto = cliente.foto;
+
+          }
+          return clienteOriginal;
+        })
       });
 
   }
@@ -71,7 +81,7 @@ export class ClientesComponent implements OnInit  {
   abrirModal(cliente : Cliente){
 
     this.clienteSeleccionado = cliente ;
-    this.modaleService.abrirModal();
+    this.modalService.abrirModal();
 
   }
 
