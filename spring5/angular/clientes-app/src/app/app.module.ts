@@ -18,6 +18,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 //import {MatNativeDateModule} from '@angular/material/core';
 import {MatMomentDateModule } from '@angular/material-moment-adapter';
+
 import { DetalleComponent } from './clientes/detalle/detalle.component';
 
 registerLocaleData(localeES,'es');
@@ -29,8 +30,9 @@ const routes : Routes = [
   {path:'clientes', component:ClientesComponent},
   {path:'clientes/page/:page', component:ClientesComponent}, // Clase 82
   {path:'clientes/form', component:FormComponent},
-  {path:'clientes/form/:id', component:FormComponent},
-  {path:'clientes/upload/:id', component:DetalleComponent}
+  {path:'clientes/form/:id', component:FormComponent}
+  // Se elimina en la seccion 105
+  //{path:'clientes/upload/:id', component:DetalleComponent}
 
 ];
 

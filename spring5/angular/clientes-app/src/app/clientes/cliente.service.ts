@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { formatDate, DatePipe } from '@angular/common';
 import localeES from '@angular/common/locales/es';
 import { Cliente } from './cliente';
+
 import { Observable, throwError} from 'rxjs';
 import { HttpClient, HttpHeaders, HttpRequest, HttpEvent } from '@angular/common/http';
 import { map, catchError, tap } from 'rxjs/operators';
@@ -24,7 +25,7 @@ export class ClienteService {
   //}
 
   constructor (private httpClient : HttpClient,
-               private router : Router ){
+               private router : Router){
 
     this.httpHeaders = new HttpHeaders().set('Content-Type','application/json');
 
@@ -167,5 +168,7 @@ export class ClienteService {
     //);
 
   }
+
+
 
 }
