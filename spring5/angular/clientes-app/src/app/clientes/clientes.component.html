@@ -44,10 +44,12 @@
           <td>{{ cliente.createAt | date:"EEEE dd, MMMM yyyy"}}</td>
           <td>{{ cliente.email }}</td>
           <td>
-            <!-- Se elimina en la seccion 105 para hacerlo modal
+            <!-- Se elimina en la seccion 105 para hacerlo modal -->
             <button type = "button" name="editar" class="btn btn-primary" [routerLink]="['/clientes/form/', cliente.id]">editar</button>
-            -->
+
+            <!--
             <button type = "button" (click)="abrirModal(cliente)" name="editar" class="btn btn-primary" >editar</button>
+            -->
           </td>
           <td>
             <button type = "button" name="elimianr" class="btn btn-danger" (click)='delete(cliente)'>eliminar</button>

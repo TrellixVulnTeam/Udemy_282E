@@ -1,4 +1,4 @@
-import { Region } from
+import { Region } from './region';
 
 export class Cliente {
 
