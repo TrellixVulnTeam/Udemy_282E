@@ -21,6 +21,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -52,7 +53,7 @@ public class ClienteRestController {
 	
 	private final Logger log = LoggerFactory.getLogger(ClienteRestController.class);
 	
-	
+	//@Secured({"ROLE_ADMIN","ROLE_USER"})
 	@GetMapping("/clientes")
 	public List<Cliente> index(){
 		
@@ -61,6 +62,7 @@ public class ClienteRestController {
 	}
 	
 	// Implementacion de paginacion
+	//@Secured({"ROLE_ADMIN","ROLE_USER"})
 	@GetMapping("/clientes/page/{page}")
 	public Page<Cliente> index(@PathVariable Integer page){
 		
@@ -72,6 +74,7 @@ public class ClienteRestController {
 		
 	}
 	
+	@Secured({"ROLE_ADMIN","ROLE_USER"})
 	@GetMapping("/clientes/{id}")
 	public ResponseEntity<?> show(@PathVariable Long id){
 		
@@ -108,6 +111,7 @@ public class ClienteRestController {
 //		return clienteService.findById(id);
 //	}
 	
+	@Secured("ROLE_ADMIN")
 	@PostMapping("/clientes")
 	public ResponseEntity<?>create(@Valid @RequestBody Cliente cliente, BindingResult result){
 		
@@ -157,6 +161,7 @@ public class ClienteRestController {
 //		
 //	}
 	
+	@Secured("ROLE_ADMIN")
 	@PutMapping("/clientes/{id}")
 	public ResponseEntity<?> update(@Valid @RequestBody Cliente cliente, BindingResult result, @PathVariable Long id){
 		
@@ -219,6 +224,7 @@ public class ClienteRestController {
 //		
 //	}
 	
+	@Secured("ROLE_ADMIN")
 	@DeleteMapping("/clientes/{id}")
 	public ResponseEntity<?> delete(@PathVariable Long id){
 		
@@ -272,6 +278,7 @@ public class ClienteRestController {
 //	}
 	
 	// Clase 95, subir archivos ( fotos )
+	@Secured({"ROLE_ADMIN","ROLE_USER"})
 	@PostMapping("/clientes/upload")
 	public ResponseEntity<?> upload(@RequestParam("archivo") MultipartFile archivo, @RequestParam("id") Long id){
 		
@@ -335,6 +342,7 @@ public class ClienteRestController {
 		
 	}
 	
+	//@Secured({"ROLE_ADMIN","ROLE_USER"})
 	@GetMapping("/uploads/img/{nombreFoto:.+}") // :.+ indica que viene con punto y una extension
 	public ResponseEntity<Resource> verFoto(@PathVariable String nombreFoto){
 		
@@ -397,6 +405,7 @@ public class ClienteRestController {
 		
 	}
 	
+	@Secured("ROLE_ADMIN")
 	@GetMapping("/clientes/regiones")
 	public List<Region> listarRegiones(){
 		

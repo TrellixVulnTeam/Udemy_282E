@@ -16,27 +16,30 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name="usuarios")
+@Table(name = "usuarios")
 public class Usuario implements Serializable {
 
-	
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	private String username;
-	
+
 	private String password;
-	
+
 	private Boolean enabled;
-	
-	@ManyToMany(fetch= FetchType.LAZY, cascade=CascadeType.ALL)
-	@JoinTable(name="usuarios_roles", 
-			   joinColumns=@JoinColumn(name="usuario_id"), 
-			   inverseJoinColumns=@JoinColumn(name="role_id"),
-			   uniqueConstraints= {@UniqueConstraint(columnNames= {"usuario_id","role_id"})})
+
+	private String nombre;
+
+	private String apellido;
+
+	private String email;
+
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinTable(name = "usuarios_roles", joinColumns = @JoinColumn(name = "usuario_id"), inverseJoinColumns = @JoinColumn(name = "role_id"), uniqueConstraints = {
+			@UniqueConstraint(columnNames = { "usuario_id", "role_id" }) })
 	private List<Role> roles;
 
 	public Usuario() {
@@ -82,7 +85,29 @@ public class Usuario implements Serializable {
 	public void setRoles(List<Role> roles) {
 		this.roles = roles;
 	}
-	
-	
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+	public String getApellido() {
+		return apellido;
+	}
+
+	public void setApellido(String apellido) {
+		this.apellido = apellido;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
 }

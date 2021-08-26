@@ -19,7 +19,7 @@ import com.telimay.spring.boot.backend.apirest.models.dao.IUsuarioDao;
 import com.telimay.spring.boot.backend.apirest.models.entity.Usuario;
 
 @Service
-public class UsuarioService implements UserDetailsService {
+public class UsuarioService implements IUsuarioService, UserDetailsService {
 	
 	private Logger logger = LoggerFactory.getLogger(UsuarioService.class);
 
@@ -50,6 +50,14 @@ public class UsuarioService implements UserDetailsService {
 					    usuario.getPassword(),
 					    usuario.getEnabled(),
 					    true, true, true, authorities);
+	}
+
+	@Override
+	@Transactional(readOnly=true)
+	public Usuario findByUsername(String username) {
+		
+		return usuarioDao.findByUsername(username);
+		
 	}
 
 }
