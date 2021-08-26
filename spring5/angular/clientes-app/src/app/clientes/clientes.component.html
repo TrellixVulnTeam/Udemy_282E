@@ -5,7 +5,7 @@
   <div class="card-body text-primary">
     <h5 class="card-title">Listado Clientes</h5>
     <div class="my-2 text-left">
-      <button class="btn btn-rounded btn-primary" type="button" [routerLink]="['/clientes/form']" >Crear cliente</button>
+      <button *ngIf="authService.hasRole('ROLE_ADMIN')" class="btn btn-rounded btn-primary" type="button" [routerLink]="['/clientes/form']" >Crear cliente</button>
     </div>
     <!--
     <div **ngIf="clientes?.length == 0" class="alert alert-info">
@@ -14,19 +14,19 @@
     -->
     <table class="table table-bordered table-striped">
       <thead>
-        <th>id</th>
+        <th *ngIf="authService.hasRole('ROLE_USER')">id</th>
         <th>nombre</th>
         <th>apellido</th>
         <th>fecha</th>
-        <th>email</th>
-        <th>editar</th>
+        <th *ngIf="authService.hasRole('ROLE_ADMIN')" >email</th>
+        <th *ngIf="authService.hasRole('ROLE_ADMIN')">editar</th>
       </thead>
       <tbody>
         <tr *ngFor="let cliente of clientes" >
           <!--
           <td><button type = "button" class="btn btn-success btn-sm" [routerLink]="['/clientes/upload', cliente.id]"></button> {{ cliente.id }}</td>
           -->
-          <td>
+          <td *ngIf="authService.hasRole('ROLE_USER')">
             <img (click)="abrirModal(cliente)"
                  *ngIf="cliente?.foto" src="http://localhost:8080/api/uploads/img/{{cliente.foto}}"
                   alt="{{cliente.foto}}" class="img-thumbnail rounded"
@@ -43,7 +43,7 @@
           <td>{{ cliente.apellido | uppercase}}</td>
           <td>{{ cliente.createAt | date:"EEEE dd, MMMM yyyy"}}</td>
           <td>{{ cliente.email }}</td>
-          <td>
+          <td *ngIf="authService.hasRole('ROLE_ADMIN')">
             <!-- Se elimina en la seccion 105 para hacerlo modal -->
             <button type = "button" name="editar" class="btn btn-primary" [routerLink]="['/clientes/form/', cliente.id]">editar</button>
 
@@ -51,7 +51,7 @@
             <button type = "button" (click)="abrirModal(cliente)" name="editar" class="btn btn-primary" >editar</button>
             -->
           </td>
-          <td>
+          <td *ngIf="authService.hasRole('ROLE_ADMIN')">
             <button type = "button" name="eliminar" class="btn btn-danger" (click)='delete(cliente)'>eliminar</button>
           </td>
 

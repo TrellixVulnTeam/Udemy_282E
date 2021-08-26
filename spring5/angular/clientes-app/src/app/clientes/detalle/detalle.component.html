@@ -23,7 +23,7 @@
                 <!-- Aplicamos un pipe (|) para formatear la fecha -->
               </ul>
 
-              <div class="input-group">
+              <div *ngIf="authService.hasRole('ROLE_ADMIN')" class="input-group">
 
                   <input (change)="seleccionarFoto($event)" type="file" class="form-control" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" aria-label="Upload">
                   <button (click) ="subirFoto()" [disabled]="!fotoSeleccionada" class="btn btn-outline-secondary" type="button" id="inputGroupFileAddon04">Subir Foto</button>

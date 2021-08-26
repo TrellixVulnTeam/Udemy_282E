@@ -3,6 +3,8 @@ import { Cliente } from './cliente';
 import { ClienteService } from './cliente.service';
 import { ModalService } from './detalle/modal.service';
 import { ActivatedRoute } from '@angular/router';
+import { AuthService } from '../usuarios/auth.service';
+
 import swal from 'sweetalert2';
 
 
@@ -19,7 +21,8 @@ export class ClientesComponent implements OnInit  {
 
   constructor(private clienteService: ClienteService,
               private activatedRoute: ActivatedRoute,
-              public  modalService : ModalService) {}
+              public  modalService : ModalService,
+              public authService : AuthService) {}
 
   ngOnInit(){
 

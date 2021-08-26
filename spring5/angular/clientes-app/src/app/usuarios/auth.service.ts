@@ -132,4 +132,15 @@ export class AuthService {
     // sessionStorage.removeItem('token');
 
   }
+
+  hasRole(role : string) : boolean {
+
+    // El include permite buscar si el rol de parametro esta en los roles del usuario
+    if (this.usuario.roles.includes(role)){
+      return true;
+    }
+
+    return false;
+    
+  }
 }
